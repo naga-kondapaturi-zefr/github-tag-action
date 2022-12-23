@@ -236,9 +236,9 @@ then
     exit 1
 fi
 
-echo "$dt: **pushing tag $new to repo $full_name"
-
 git_tag_sha=$( echo "${git_tags_response}" | jq .sha | tr -d '"' )
+
+echo "$dt: **pushing tag $new with SHA $git_tag_sha to repo $full_name"
 
 git_refs_response=$(
 curl -s -X POST "$git_refs_url" \
@@ -252,7 +252,7 @@ EOF
 )
 
 git_ref_posted=$( echo "${git_refs_response}" | jq .ref | tr -d '"' )
-
+echo "${git_refs_response}"
 echo "::debug::${git_refs_response}"
 if [ "${git_ref_posted}" = "refs/tags/${new}" ]
 then
