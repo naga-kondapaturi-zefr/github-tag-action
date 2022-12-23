@@ -223,7 +223,7 @@ curl -s -X POST "$git_tags_url" \
 
 {
   "tag": "$new",
-  "message": "annotated version"
+  "message": "annotated version",
   "object": "$commit",
   "type": "commit"
 }
