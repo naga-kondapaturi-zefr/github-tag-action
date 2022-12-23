@@ -223,7 +223,8 @@ curl -s -X POST "$git_refs_url" \
 
 {
   "ref": "refs/tags/$new",
-  "sha": "$commit"
+  "sha": "$commit",
+  "type": "tag"
 }
 EOF
 )
