@@ -230,10 +230,10 @@ curl -s -X POST "$git_refs_url" \
 EOF
 )
 
-git_ref_posted=$( echo "${git_refs_response}" | jq .ref | tr -d '"' )
+git_ref_posted=$( echo "${git_refs_response}" | jq .tag | tr -d '"' )
 
 echo "::debug::${git_refs_response}"
-if [ "${git_ref_posted}" = "refs/tags/${new}" ]
+if [ "${git_ref_posted}" = "${new}" ]
 then
     exit 0
 else
