@@ -230,10 +230,8 @@ EOF
 git_tag_posted=$( echo "${git_tags_response}" | jq .tag | tr -d '"' )
 
 echo "::debug::${git_tags_response}"
-if [ "${git_tag_posted}" = "${new}" ]
+if ! [ "${git_tag_posted}" = "${new}" ]
 then
-    exit 0
-else
     echo "::error::Tag was not created properly."
     exit 1
 fi
