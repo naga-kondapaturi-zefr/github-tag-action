@@ -222,9 +222,10 @@ curl -s -X POST "$git_refs_url" \
 -d @- << EOF
 
 {
-  "ref": "refs/tags/$new",
-  "sha": "$commit",
-  "type": "tag"
+  "tag": "$new",
+  "message": "annotated version"
+  "object": "$commit",
+  "type": "commit"
 }
 EOF
 )
