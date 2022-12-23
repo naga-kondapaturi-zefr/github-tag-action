@@ -22,6 +22,9 @@ branch_history=${BRANCH_HISTORY:-full}
 # since https://github.blog/2022-04-12-git-security-vulnerability-announced/ runner uses?
 git config --global --add safe.directory /github/workspace
 
+git config user.name "${GITHUB_ACTOR}"
+git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
 cd "${GITHUB_WORKSPACE}/${source}" || exit 1
 
 echo "*** CONFIGURATION ***"
@@ -204,7 +207,7 @@ then
 fi
 
 # create local git tag
-git tag "$new"
+git tag --annotate --message="Automatically bumped by github-tag-action" "$new"
 
 # push new tag ref to github
 dt=$(date '+%Y-%m-%dT%H:%M:%SZ')
