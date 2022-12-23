@@ -207,7 +207,7 @@ then
 fi
 
 # create local git tag
-git tag --annotate --message="Automatically bumped by github-tag-action" "$new"
+git tag --annotate "${commit}" --message="Automatically bumped by github-tag-action" "$new"
 
 # push new tag ref to github
 dt=$(date '+%Y-%m-%dT%H:%M:%SZ')
