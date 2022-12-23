@@ -206,15 +206,12 @@ then
     exit 0
 fi
 
-# create local git tag
-git tag --annotate "$new" "${commit}" --message="Automatically bumped by github-tag-action"
-
-# push new tag ref to github
+# create a new annotated tag reference
 dt=$(date '+%Y-%m-%dT%H:%M:%SZ')
 full_name=$GITHUB_REPOSITORY
 git_tags_url=$(jq .repository.git_tags_url "$GITHUB_EVENT_PATH" | tr -d '"' | sed 's/{\/sha}//g')
 
-echo "$dt: **pushing tag $new to repo $full_name"
+echo "$dt: **creating tag $new reference"
 
 git_tags_response=$(
 curl -s -X POST "$git_tags_url" \
@@ -238,5 +235,31 @@ then
     exit 0
 else
     echo "::error::Tag was not created properly."
+    exit 1
+fi
+
+echo "$dt: **pushing tag $new to repo $full_name"
+
+git_tag_sha=$( echo "${git_tags_response}" | jq .sha | tr -d '"' )
+
+git_refs_response=$(
+curl -s -X POST "$git_refs_url" \
+-H "Authorization: token $GITHUB_TOKEN" \
+-d @- << EOF
+{
+  "ref": "refs/tags/$new",
+  "sha": "$git_tag_sha"
+}
+EOF
+)
+
+git_ref_posted=$( echo "${git_refs_response}" | jq .ref | tr -d '"' )
+
+echo "::debug::${git_refs_response}"
+if [ "${git_ref_posted}" = "refs/tags/${new}" ]
+then
+    exit 0
+else
+    echo "::error::Tag was not pushed properly."
     exit 1
 fi
