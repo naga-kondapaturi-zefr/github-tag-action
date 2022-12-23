@@ -237,6 +237,7 @@ then
 fi
 
 git_tag_sha=$( echo "${git_tags_response}" | jq .sha | tr -d '"' )
+git_refs_url=$(jq .repository.git_refs_url "$GITHUB_EVENT_PATH" | tr -d '"' | sed 's/{\/sha}//g')
 
 echo "$dt: **pushing tag $new with SHA $git_tag_sha to repo $full_name"
 
